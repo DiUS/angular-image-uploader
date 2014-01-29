@@ -17,7 +17,8 @@ angular.module('imageUpload')
       image = new Image
 
       image.onload  = -> 
-        element.find('.fileUploadImage').append image
+        imageElement = angular.element element[0].querySelector('.fileUploadImage')
+        imageElement.append image
       image.onerror = -> 
         image.src = scope.imageUpload.placeholder
 
@@ -31,8 +32,8 @@ angular.module('imageUpload')
       # Reset the uploader
       reset = ->
         # Hide the loading symbol
-        element.find('.fileUpload-loading').css
-          display: 'none'
+        loadingElement = angular.element element[0].querySelector('.fileUpload-loading')
+        loadingElement.css display: 'none'
 
         # Empty the upload field
         element.find('input').val ''
@@ -44,12 +45,14 @@ angular.module('imageUpload')
       reset()
 
       # Style the things
-      element.find('.fileUpload').css
+      fileUploadElement = angular.element element[0].querySelector('.fileUpload')
+      fileUploadElement.css
         position: 'relative'
         width:    '100%'
         height:   '100%'
 
-      element.find('form, input, .fileUpload-loading').css
+      nestedElements = angular.element element[0].querySelectorAll('form, input, .fileUpload-loading')
+      nestedElements.css
         position: 'absolute'
         top:      '0'
         right:    '0'
@@ -61,7 +64,8 @@ angular.module('imageUpload')
         height:   '100%'
         cursor:   'default'
 
-      element.find('.fileUpload-loading').css
+      loadingElement = angular.element element[0].querySelector('.fileUpload-loading')
+      loadingElement.css
         background: 'white url(images/loading.gif) center center no-repeat'
         opacity:    '0.6'
 
