@@ -32,7 +32,7 @@ angular.module('myApp', [
 
 Provide options in your controller.
 ```
-angular.module('myApp').controller 'ImageCtrl', ($scope) ->
+angular.module('myApp').controller('ImageCtrl', function ($scope) {
   $scope.imageOptions = {
     read: <url_to_read_image_from>,
     write: <url_to_write_image_to>,
@@ -41,11 +41,12 @@ angular.module('myApp').controller 'ImageCtrl', ($scope) ->
       console.log('error, ', response);
     }
   };
+});
 ```
 
 And use the directive
 ```
-<div image-upload="imageOptions"></dic>
+<div image-upload="imageOptions"></div>
 ```
 
 If you would like to have a loading symbol while the upload is happening, you can simply use css
