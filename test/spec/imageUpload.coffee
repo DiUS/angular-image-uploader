@@ -237,3 +237,35 @@ describe 'Directive: imageUpload', ->
         runs ->
           expect(imageElement.find('img').attr('src')).not.toBe firstImageUrl
           expect(imageElement.find('img').attr('src')).toMatch scope.imageOptions.read
+
+    describe 'on error', ->
+      response = 'a response'
+
+      beforeEach ->
+        scope.imageOptions.error = jasmine.createSpy('error')
+        scope.$digest()
+        error.mostRecentCall.args[0](response)
+
+      it 'should hide the loading element', ->
+        loadingElement = angular.element element.querySelector('.fileUpload-loading')
+        expect(loadingElement.css('display')).toBe 'none'
+
+      xit 'should reset the file input value', ->
+        # impossible to test at this point, security issue with setting the val on input type=file 
+
+      it 'should set the new image', ->
+        imageElement = null
+
+        runs ->
+          imageElement = angular.element element.querySelector('.fileUploadImage')
+
+        waitsFor ->
+          imageElement.find('img').attr('src') != undefined
+        , 2000, 'image source to be set'
+
+        runs ->
+          expect(imageElement.find('img').attr('src')).not.toBe firstImageUrl
+          expect(imageElement.find('img').attr('src')).toMatch scope.imageOptions.read
+
+      it 'should trigger error callback provided', ->
+        expect(scope.imageOptions.error).toHaveBeenCalledWith jasmine.any(Object), response
