@@ -1,15 +1,15 @@
 'use strict'
 
-angular.module 'imageUpload', []
+angular.module 'imageUploader', []
 
-angular.module('imageUpload')
-  .directive 'imageUpload', ($http) ->
+angular.module('imageUploader')
+  .directive 'imageUploader', ($http) ->
     scope: 
-      imageUpload: '='
+      imageUploader: '='
     template: ' <div class="fileUpload">
                   <div class="fileUploadImage"></div>
                   <form enctype="multipart/form-data">
-                    <input type="file" name="file" ng-disabled="!imageUpload.enabled" title="&#8203;" />
+                    <input type="file" name="file" ng-disabled="!imageUploader.enabled" title="&#8203;" />
                   </form>
                   <div class="fileUpload-loading"></div>
                 </div>'
@@ -20,12 +20,12 @@ angular.module('imageUpload')
         imageElement = angular.element element[0].querySelector('.fileUploadImage')
         imageElement.append image
       image.onerror = -> 
-        image.src = scope.imageUpload.placeholder
+        image.src = scope.imageUploader.placeholder
 
       # Update photo url
-      scope.$watch 'imageUpload.read', ->
-        if scope.imageUpload.read?
-          image.src = scope.imageUpload.read
+      scope.$watch 'imageUploader.read', ->
+        if scope.imageUploader.read?
+          image.src = scope.imageUploader.read
         else 
           image.src = 'broken'
 
@@ -39,8 +39,8 @@ angular.module('imageUpload')
         element.find('input').val ''
 
         # Update the image
-        return unless scope.imageUpload.read?
-        image.src = "#{scope.imageUpload.read}?#{Math.random()}"
+        return unless scope.imageUploader.read?
+        image.src = "#{scope.imageUploader.read}?#{Math.random()}"
 
       reset()
 
@@ -74,7 +74,7 @@ angular.module('imageUpload')
         reset()
 
         # Trigger error callback
-        scope.$eval scope.imageUpload.error, response
+        scope.$eval scope.imageUploader.error, response
 
       # Once a file has been selected
       element.find('input').bind 'change', ->
@@ -90,5 +90,5 @@ angular.module('imageUpload')
           headers:          'Content-Type': undefined
           transformRequest: angular.identity
 
-        $http.put(scope.imageUpload.write, data, options)
+        $http.put(scope.imageUploader.write, data, options)
           .success(reset).error(error)

@@ -1,5 +1,5 @@
-angular-image-upload
-====================
+angular-image-uploader
+======================
 
 Upload images in an elegant way with this AngularJS directive.
 
@@ -15,7 +15,7 @@ install
 -------
 
 ```
-bower install angular-image-upload
+bower install angular-image-uploader
 ```
 
 usage
@@ -25,7 +25,7 @@ Make sure you include the module in your application config
 
 ```
 angular.module('myApp', [
-  'imageUpload',
+  'imageUploader',
   ...
 ]);
 ```
@@ -46,7 +46,7 @@ angular.module('myApp').controller('ImageCtrl', function ($scope) {
 
 And use the directive
 ```
-<div image-upload="imageOptions"></div>
+<div image-uploader="imageOptions"></div>
 ```
 
 If you would like to have a loading symbol while the upload is happening, you can simply use css

@@ -1,8 +1,8 @@
 'use strict'
 
-describe 'Directive: imageUpload', ->
+describe 'Directive: imageUploader', ->
 
-  beforeEach module 'imageUpload'
+  beforeEach module 'imageUploader'
 
   $http   = null
   scope   = {}
@@ -15,7 +15,7 @@ describe 'Directive: imageUpload', ->
 
   describe 'rendering', ->
     beforeEach inject ($compile) ->
-      element = angular.element '<div image-upload="imageOptions"></div>'
+      element = angular.element '<div image-uploader="imageOptions"></div>'
       element = $compile(element)(scope)[0]
 
     it 'should render the template', ->
@@ -53,7 +53,7 @@ describe 'Directive: imageUpload', ->
 
   describe 'initialise and reset', ->
     beforeEach inject ($compile) ->
-      element = angular.element '<div image-upload="imageOptions"></div>'
+      element = angular.element '<div image-uploader="imageOptions"></div>'
       scope.imageOptions.read = 'https://www.google.com/images/srpr/logo11w.png'
 
       element = $compile(element)(scope)[0]
@@ -81,7 +81,7 @@ describe 'Directive: imageUpload', ->
 
   describe 'when read url changes', ->
     beforeEach inject ($compile) ->
-      element = angular.element '<div image-upload="imageOptions"></div>'
+      element = angular.element '<div image-uploader="imageOptions"></div>'
       element = $compile(element)(scope)[0]
 
     describe 'if the read url is empty', ->
@@ -123,7 +123,7 @@ describe 'Directive: imageUpload', ->
 
   describe 'styling', ->
     beforeEach inject ($compile) ->
-      element = angular.element '<div image-upload="imageOptions"></div>'
+      element = angular.element '<div image-uploader="imageOptions"></div>'
       element = $compile(element)(scope)[0]
 
     it 'should style the element', ->
@@ -178,7 +178,7 @@ describe 'Directive: imageUpload', ->
     firstImageUrl = null
 
     beforeEach inject ($compile) ->
-      element = angular.element '<div image-upload="imageOptions"></div>'
+      element = angular.element '<div image-uploader="imageOptions"></div>'
       scope.imageOptions.read  = 'https://www.google.com/images/srpr/logo11w.png'
       scope.imageOptions.write = 'http://my.write.url'
       element = $compile(element)(scope)[0]
