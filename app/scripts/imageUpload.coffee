@@ -79,10 +79,10 @@ angular.module('imageUpload')
       # Once a file has been selected
       element.find('input').bind 'change', ->
         # Show the loading symbol
-        element.find('.fileUpload-loading').css
-          display: 'block'
+        loadingElement = angular.element element[0].querySelector('.fileUpload-loading')
+        loadingElement.css display: 'block'
 
-        data = new FormData angular.element('form')[0]
+        data = new FormData element.find('form')[0]
 
         options = 
           withCredentials:  true

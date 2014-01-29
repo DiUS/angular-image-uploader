@@ -158,5 +158,41 @@ describe 'Directive: imageUpload', ->
       expect(loadingElement.css('height')).toBe    '100%'
       expect(loadingElement.css('cursor')).toBe    'default'
       expect(loadingElement.css('background')).toBe 'url(http://localhost:8080/images/loading.gif) 50% 50% no-repeat white'
-      
+  
+  describe 'when a file is uploaded', ->
+    beforeEach inject ($compile) ->
+      element = angular.element '<div image-upload="imageOptions"></div>'
+      scope.imageOptions.write = 'http://my.write.url'
+      element = $compile(element)(scope)[0]
 
+      # Chaining with http put
+      error   = jasmine.createSpy('error')
+      success = jasmine.createSpy('success').andReturn
+        error: error
+      spyOn($http, 'put').andReturn success: success
+
+      inputElement = angular.element element.querySelector('form input')
+      inputElement.triggerHandler 'change'
+
+    it 'should display the loading element', ->
+      loadingElement = angular.element element.querySelector('.fileUpload-loading')
+      expect(loadingElement.css('display')).toBe 'block'
+
+    it 'should call http put', ->
+      expect($http.put).toHaveBeenCalled()
+
+    describe '$http.put', ->
+      it 'should put to the write url provided', ->
+        expect($http.put.mostRecentCall.args[0]).toBe scope.imageOptions.write
+
+      it 'should get its data from the form', ->
+        data = $http.put.mostRecentCall.args[1]
+        expect(data instanceof FormData).toBeTruthy()
+
+      it 'should pass options', ->
+        expect($http.put.mostRecentCall.args[2].withCredentials).toBeTruthy()
+        expect($http.put.mostRecentCall.args[2].cache).toBeFalsy()
+        expect($http.put.mostRecentCall.args[2].headers['Content-Type']).toBeUndefined()
+        expect($http.put.mostRecentCall.args[2].transformRequest instanceof Function).toBeTruthy()
+
+    # describe 'on success', ->
