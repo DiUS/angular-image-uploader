@@ -32,6 +32,19 @@ describe 'Directive: imageUpload', ->
       expect(inputElement.attr('type')).toBe 'file'
       expect(inputElement.attr('name')).toBe 'file'
 
+    it 'should set the file input title to a hidden character', ->
+      inputElement = angular.element element.querySelector('form input')
+      expect(inputElement.attr('title').length).toBe 1
+      expect(inputElement.attr('title').trim()).toBe ''
+
+    it 'should disable the input if option to do so is given', ->
+      inputElement = angular.element element.querySelector('form input')
+      expect(inputElement.attr('disabled')).not.toBe 'disabled'
+      scope.imageOptions.enabled = false
+      scope.$digest()
+      expect(inputElement.attr('disabled')).toBe 'disabled'
+
+
     it 'should render an image', ->
       expect(element.querySelector('.fileUploadImage')).not.toBeNull()
       
