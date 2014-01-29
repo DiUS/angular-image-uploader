@@ -7,9 +7,17 @@ how it works
 ------------
 A form is hidden behind the image you choose to display. The user can click on the image, which 
 allows them to select a new image file and upload to the url chosen. The image will automatically 
-replace itself once the image has been uplaoded successfully. This is all done asynchronously. 
+replace itself once the image has been uplaoded successfully. This is all done asynchronously.
 
 Developers can also set their own loading symbol and error handling if they so choose to.
+
+browser support
+---------------
+Tested and verified to work in Google Chrome & Safari.
+
+dependencies
+------------
+This directive is jQuery free.
 
 install
 -------
