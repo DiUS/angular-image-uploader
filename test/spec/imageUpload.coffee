@@ -160,10 +160,28 @@ describe 'Directive: imageUpload', ->
       expect(loadingElement.css('background')).toBe 'url(http://localhost:8080/images/loading.gif) 50% 50% no-repeat white'
   
   describe 'when a file is uploaded', ->
+    success = null
+    error   = null
+    firstImageUrl = null
+
     beforeEach inject ($compile) ->
       element = angular.element '<div image-upload="imageOptions"></div>'
+      scope.imageOptions.read  = 'https://www.google.com/images/srpr/logo11w.png'
       scope.imageOptions.write = 'http://my.write.url'
       element = $compile(element)(scope)[0]
+
+      # get first image url
+      imageElement = null
+
+      runs ->
+        imageElement = angular.element element.querySelector('.fileUploadImage')
+
+      waitsFor ->
+        imageElement.find('img').attr('src') != undefined
+      , 2000, 'image source to be set'
+
+      runs ->
+        firstImageUrl = imageElement.find('img').attr('src')
 
       # Chaining with http put
       error   = jasmine.createSpy('error')
@@ -195,4 +213,27 @@ describe 'Directive: imageUpload', ->
         expect($http.put.mostRecentCall.args[2].headers['Content-Type']).toBeUndefined()
         expect($http.put.mostRecentCall.args[2].transformRequest instanceof Function).toBeTruthy()
 
-    # describe 'on success', ->
+    describe 'on success', ->
+      beforeEach ->
+        success.mostRecentCall.args[0]()
+
+      it 'should hide the loading element', ->
+        loadingElement = angular.element element.querySelector('.fileUpload-loading')
+        expect(loadingElement.css('display')).toBe 'none'
+
+      xit 'should reset the file input value', ->
+        # impossible to test at this point, security issue with setting the val on input type=file 
+
+      it 'should set the new image', ->
+        imageElement = null
+
+        runs ->
+          imageElement = angular.element element.querySelector('.fileUploadImage')
+
+        waitsFor ->
+          imageElement.find('img').attr('src') != undefined
+        , 2000, 'image source to be set'
+
+        runs ->
+          expect(imageElement.find('img').attr('src')).not.toBe firstImageUrl
+          expect(imageElement.find('img').attr('src')).toMatch scope.imageOptions.read
