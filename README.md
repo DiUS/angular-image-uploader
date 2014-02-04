@@ -47,6 +47,9 @@ angular.module('myApp').controller('ImageCtrl', function ($scope) {
     enabled: true,
     error: function (event, response) {
       console.log('error, ', response);
+    },
+    success: function (event, response) {
+      console.log('success, ', response);
     }
   };
 });
