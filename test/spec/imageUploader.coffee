@@ -217,8 +217,12 @@ describe 'Directive: imageUploader', ->
         expect($http.put.mostRecentCall.args[2].transformRequest instanceof Function).toBeTruthy()
 
     describe 'on success', ->
+      response = 'a response'
+      
       beforeEach ->
-        success.mostRecentCall.args[0]()
+        scope.imageOptions.success = jasmine.createSpy('success')
+        scope.$digest()
+        success.mostRecentCall.args[0](response)
 
       it 'should hide the loading element', ->
         loadingElement = angular.element element.querySelector('.fileUpload-loading')
@@ -240,6 +244,9 @@ describe 'Directive: imageUploader', ->
         runs ->
           expect(imageElement.find('img').attr('src')).not.toBe firstImageUrl
           expect(imageElement.find('img').attr('src')).toMatch scope.imageOptions.read
+
+      it 'should trigger success callback provided', ->
+        expect(scope.imageOptions.success).toHaveBeenCalledWith jasmine.any(Object), response
 
     describe 'on error', ->
       response = 'a response'

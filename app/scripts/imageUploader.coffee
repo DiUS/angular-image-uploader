@@ -71,6 +71,13 @@ angular.module('imageUploader')
         # Trigger error callback
         scope.$eval scope.imageUploader.error, response
 
+      success = (response) ->
+        # Reset the uploader
+        reset()
+
+        # Trigger success callback
+        scope.$eval scope.imageUploader.success, response
+
       # Once a file has been selected
       element.find('input').bind 'change', ->
         # Show the loading symbol
@@ -86,4 +93,4 @@ angular.module('imageUploader')
           transformRequest: angular.identity
 
         $http.put(scope.imageUploader.write, data, options)
-          .success(reset).error(error)
+          .success(success).error(error)
