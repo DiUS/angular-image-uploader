@@ -19,15 +19,10 @@ angular.module('imageUploader')
       image.onload  = -> 
         imageElement = angular.element element[0].querySelector('.fileUploadImage')
         imageElement.append image
-      image.onerror = -> 
-        image.src = scope.imageUploader.placeholder
 
       # Update photo url
       scope.$watch 'imageUploader.read', ->
-        if scope.imageUploader.read?
-          image.src = scope.imageUploader.read
-        else 
-          image.src = 'broken'
+        image.src = scope.imageUploader.read || ''
 
       # Reset the uploader
       reset = ->

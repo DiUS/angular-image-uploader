@@ -87,21 +87,11 @@ describe 'Directive: imageUploader', ->
     describe 'if the read url is empty', ->
       beforeEach ->
         scope.imageOptions.read = null
-        scope.imageOptions.placeholder = 'https://www.google.com/images/srpr/logo11w.png'
         scope.$digest()
 
-      it 'should set the image url to the placeholder', ->
-        imageElement = null
-
-        runs ->
-          imageElement = angular.element element.querySelector('.fileUploadImage')
-
-        waitsFor ->
-          imageElement.find('img').attr('src') != undefined
-        , 2000, 'image source to be set'
-
-        runs ->
-          expect(imageElement.find('img').attr('src')).toBe scope.imageOptions.placeholder
+      it 'should set the image url to be empty', ->
+        imageElement = angular.element element.querySelector('.fileUploadImage')
+        expect(imageElement.find('img').attr('src')).toBeUndefined()
 
     describe 'if the read url is set', ->
       beforeEach ->
