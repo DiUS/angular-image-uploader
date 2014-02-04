@@ -15,22 +15,15 @@
                   <div class="fileUpload-loading"></div>\
                 </div>',
       link: function(scope, element, attrs) {
-        var error, fileUploadElement, image, loadingElement, nestedElements, reset;
+        var error, fileUploadElement, image, loadingElement, nestedElements, reset, success;
         image = new Image;
         image.onload = function() {
           var imageElement;
           imageElement = angular.element(element[0].querySelector('.fileUploadImage'));
           return imageElement.append(image);
         };
-        image.onerror = function() {
-          return image.src = scope.imageUploader.placeholder;
-        };
         scope.$watch('imageUploader.read', function() {
-          if (scope.imageUploader.read != null) {
-            return image.src = scope.imageUploader.read;
-          } else {
-            return image.src = 'broken';
-          }
+          return image.src = scope.imageUploader.read || '';
         });
         reset = function() {
           var loadingElement;
@@ -73,6 +66,10 @@
           reset();
           return scope.$eval(scope.imageUploader.error, response);
         };
+        success = function(response) {
+          reset();
+          return scope.$eval(scope.imageUploader.success, response);
+        };
         return element.find('input').bind('change', function() {
           var data, options;
           loadingElement = angular.element(element[0].querySelector('.fileUpload-loading'));
@@ -88,7 +85,7 @@
             },
             transformRequest: angular.identity
           };
-          return $http.put(scope.imageUploader.write, data, options).success(reset).error(error);
+          return $http.put(scope.imageUploader.write, data, options).success(success).error(error);
         });
       }
     };
