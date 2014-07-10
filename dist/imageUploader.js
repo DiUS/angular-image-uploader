@@ -15,7 +15,7 @@
                   <div class="fileUpload-loading"></div>\
                 </div>',
       link: function(scope, element, attrs) {
-        var error, fileUploadElement, image, loadingElement, nestedElements, reset, success;
+        var error, fileUploadElement, image, loadingElement, nestedElements, reset, success, upload;
         image = new Image;
         image.onload = function() {
           var imageElement;
@@ -70,13 +70,47 @@
           reset();
           return scope.$eval(scope.imageUploader.success, response);
         };
-        return element.find('input').bind('change', function() {
-          var data, options;
+        element.find('input').bind('change', function() {
+          var file, fileReader;
           loadingElement = angular.element(element[0].querySelector('.fileUpload-loading'));
           loadingElement.css({
             display: 'block'
           });
-          data = new FormData(element.find('form')[0]);
+          file = element.find('input')[0].files[0];
+          fileReader = new FileReader();
+          if (file.size > 1048576) {
+            fileReader.onload = function(e) {
+              var img;
+              img = new Image();
+              img.onload = function() {
+                var c, formData, h, max, r, w;
+                max = 600;
+                r = max / this.height;
+                w = Math.round(this.width * r);
+                h = Math.round(this.height * r);
+                c = document.createElement("canvas");
+                c.width = w;
+                c.height = h;
+                c.getContext("2d").drawImage(this, 0, 0, w, h);
+                formData = new FormData();
+                formData.append('file', c.toDataURL());
+                return upload(formData);
+              };
+              return img.src = e.target.result;
+            };
+            return fileReader.readAsDataURL(file);
+          } else {
+            fileReader.onload = function(e) {
+              var formData;
+              formData = new FormData();
+              formData.append('file', e.target.result);
+              return upload(formData);
+            };
+            return fileReader.readAsDataURL(file);
+          }
+        });
+        return upload = function(formData) {
+          var options;
           options = {
             withCredentials: true,
             cache: false,
@@ -85,8 +119,8 @@
             },
             transformRequest: angular.identity
           };
-          return $http.put(scope.imageUploader.write, data, options).success(success).error(error);
-        });
+          return $http.put(scope.imageUploader.write, formData, options).success(success).error(error);
+        };
       }
     };
   });
