@@ -4,7 +4,7 @@ angular.module 'imageUploader', []
 
 angular.module('imageUploader')
   .directive 'imageUploader', ($http) ->
-    scope: 
+    scope:
       imageUploader: '='
     template: ' <div class="fileUpload">
                   <div class="fileUploadImage"></div>
@@ -16,7 +16,7 @@ angular.module('imageUploader')
     link: (scope, element, attrs) ->
       image = new Image
 
-      image.onload  = -> 
+      image.onload  = ->
         imageElement = angular.element element[0].querySelector('.fileUploadImage')
         imageElement.append image
 
@@ -84,13 +84,40 @@ angular.module('imageUploader')
         loadingElement = angular.element element[0].querySelector('.fileUpload-loading')
         loadingElement.css display: 'block'
 
-        data = new FormData element.find('form')[0]
+        file = element.find('input')[0].files[0]
 
-        options = 
+        fileReader = new FileReader()
+
+        if file.size > 1048576
+          fileReader.onload = (e) ->
+            img = new Image()
+            img.onload = ->
+              max = 600
+              r = max / this.height
+              w = Math.round(this.width * r)
+              h = Math.round(this.height * r)
+              c = document.createElement("canvas")
+              c.width = w
+              c.height = h
+              c.getContext("2d").drawImage(this, 0, 0, w, h)
+              formData = new FormData()
+              formData.append('file', c.toDataURL())
+              upload(formData)
+            img.src=e.target.result
+          fileReader.readAsDataURL(file)
+        else
+          fileReader.onload = (e) ->
+            formData = new FormData()
+            formData.append('file', e.target.result)
+            upload(formData)
+          fileReader.readAsDataURL(file)
+
+      upload = (formData) ->
+        options =
           withCredentials:  true
           cache:            false
           headers:          'Content-Type': undefined
           transformRequest: angular.identity
 
-        $http.put(scope.imageUploader.write, data, options)
+        $http.put(scope.imageUploader.write, formData, options)
           .success(success).error(error)
