@@ -31,19 +31,19 @@ usage
 
 Make sure you include the module in your application config
 
-```
+```javascript
 angular.module('myApp', [
   'imageUploader',
-  ...
+  //...
 ]);
 ```
 
 Provide options in your controller.
-```
+```javascript
 angular.module('myApp').controller('ImageCtrl', function ($scope) {
   $scope.imageOptions = {
-    read: <url_to_read_image_from>,
-    write: <url_to_write_image_to>,
+    read: /*<url_to_read_image_from>*/,
+    write: /*<url_to_write_image_to>*/,
     enabled: true,
     error: function (event, response) {
       console.log('error, ', response);
@@ -56,14 +56,14 @@ angular.module('myApp').controller('ImageCtrl', function ($scope) {
 ```
 
 And use the directive
-```
+```html
 <div image-uploader="imageOptions"></div>
 ```
 
 If you would like to have a loading symbol while the upload is happening, you can simply use css
-```
+```javascript
 .fileUpload .fileUpload-loading {
-  background: ...
+  background: //...
 }
 ```
 
